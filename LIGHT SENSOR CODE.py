@@ -57,13 +57,18 @@ while True:
         print("OFF -> turn / explore")
 
     else:
-        print("No sugnificant change")
+        print("No significant change")
 
     previous = current 
     time.sleep(1)
 
 
 # EMA (Exponential Moving Average)
+# cleans up sensor readings and ensures robot makes better decisions
+# value = current light reading 
+# ema = previous smoothed calue 
+# alpha = controls smoothing 
+
 alpha = 0.3
 ema = read_light()
 
