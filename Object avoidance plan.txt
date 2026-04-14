@@ -1,0 +1,94 @@
+----------------------------------------------------------------------------------------------------
+Preditor detection (denoted as rapid moving object)
+
+
+Add outside while true loop:
+-----
+# Initiate values
+current_value_Front = ultrasonic_data[0]
+current_value_Left = ultrasonic_data[1]
+current_value_Right = ultrasonic_data[2]
+current_value_Back = ultrasonic_data[3]
+-----
+
+
+Add inside while true loop for constant detection:
+-----
+# calcluate the change in values
+previous_value_Front = current_value_Front
+current_value_Front = ultrasonic_data[0]
+change_Front = current_value_Front - previous_value_Front
+
+previous_value_Left = current_value_Left
+current_value_Left = ultrasonic_data[1]
+change_Left = current_value_Left - previous_value_Left
+
+previous_value_Right = current_value_Right
+current_value_Right = ultrasonic_data[2]
+change_Right = current_value_Right - previous_value_Right
+
+previous_value_Back = current_value_Back
+current_value_Back = ultrasonic_data[3]
+change_Back = current_value_Back - previous_value_Back
+
+
+# Predator check
+if change_Front >= 25 or change_Front >= 25 or change_Front >= 25 or change_Front >= 25:
+  # open_wing()
+----------------------------------------------------------------------------------------------------
+
+
+
+----------------------------------------------------------------------------------------------------
+ultrasonic_data[3] = []
+
+def ultrasonic():
+  
+  # Fetch ultrasonic distance measurements
+  ultrasonic_data[3] = []
+  
+  ultrasonic_data[0] = distanceSensor_Front()
+  ultrasonic_data[1] = distanceSensor_Left()
+  ultrasonic_data[2] = distanceSensor_Right()
+  ultrasonic_data[3] = distanceSensor_Back()
+  return
+----------------------------------------------------------------------------------------------------
+
+
+----------------------------------------------------------------------------------------------------
+# Front Ultrasonic if wall
+if ultrasonic_data[0] <= 25:
+  
+  #Turn Robot Left
+  Left()
+  
+  
+# Left Ultrasonic if wall
+if ultrasonic_data[1] <= 15:
+  
+  # Turn Robot Right
+  Right()
+  
+  
+# Right Ultrasonic if wall
+if ultrasonic_data[2] <= 15:
+  
+  # Turn Robot Left
+  Left()
+  
+  
+# Back Ultrasonic if wall
+if ultrasonic_data[3] <= 10:
+  
+  # Move Forward
+  Forward()
+----------------------------------------------------------------------------------------------------
+
+notes:
+
+
+Object avoidance:
+
+25 cm from front 
+30 cm from sides
+10 cm from back
