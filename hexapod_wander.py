@@ -1,7 +1,3 @@
-# ============================================================
-#  Hexapod Robot - Random Wander + Object Avoidance
-#  Optimised for Thonny / MicroPython on Raspberry Pi Pico
-# ============================================================
 
 import time
 import random
@@ -12,9 +8,7 @@ from adafruit_pca9685 import PCA9685
 from servo import Servos
 from machine import I2C, Pin
 
-# ------------------------------------------------------------
-#  PCA9685 SETUP
-# ------------------------------------------------------------
+
 i2c_board = busio.I2C(SCL, SDA)
 pca = PCA9685(i2c_board)
 pca.frequency = 50
@@ -37,9 +31,6 @@ motor_pins = {
     "R3_hip": 12,  "R3_knee": 13,
 }
 
-# ------------------------------------------------------------
-#  CSV LOGGING
-# ------------------------------------------------------------
 csv_filename = "pca9685_log.csv"
 with open(csv_filename, mode="w", newline="") as file:
     writer = csv.writer(file)
@@ -68,18 +59,13 @@ def set_leg(name, degrees):
     """Move a named servo to a given angle."""
     servos.position(motor_pins[name], degrees=degrees)
 
-# ------------------------------------------------------------
-#  STARTUP - Centre all servos
-# ------------------------------------------------------------
+
 def hexapod_start():
     for i in range(14):
         servos.position(i, degrees=90)
     print("Hexapod ready - all legs centred.")
 
-# ------------------------------------------------------------
-#  MOVEMENT PRIMITIVES
-#  Tripod gait: Group A = L1, R2, L3 | Group B = R1, L2, R3
-# ------------------------------------------------------------
+
 STEP_DELAY  = 0.15   # seconds between sub-steps
 LIFT_ANGLE  = 60     # knee angle for lifting a leg
 STAND_ANGLE = 90     # neutral knee angle
@@ -176,10 +162,7 @@ def open_wing():
         servos.position(i, degrees=45)
     timer(1.0)
 
-# ------------------------------------------------------------
-#  ULTRASONIC SENSORS
-#  Replace each distanceSensor_X() body with your real sensor reads
-# ------------------------------------------------------------
+
 ultrasonic_data = [0, 0, 0, 0]   # [Front, Left, Right, Back]
 
 def distanceSensor_Front():
@@ -201,9 +184,6 @@ def ultrasonic():
     ultrasonic_data[2] = distanceSensor_Right()
     ultrasonic_data[3] = distanceSensor_Back()
 
-# ------------------------------------------------------------
-#  OBJECT AVOIDANCE THRESHOLDS (cm)
-# ------------------------------------------------------------
 THRESH_FRONT = 25
 THRESH_SIDE  = 30
 THRESH_BACK  = 10
@@ -241,10 +221,7 @@ def check_avoidance():
 
     return False
 
-# ------------------------------------------------------------
-#  PREDATOR DETECTION
-#  Triggers when any sensor closes by >= 25 cm in one cycle
-# ------------------------------------------------------------
+
 PREDATOR_CHANGE_THRESH = 25
 
 # Will be initialised after first sensor read
@@ -296,10 +273,7 @@ def check_predator():
 
     return False
 
-# ------------------------------------------------------------
-#  RANDOM WANDER
-#  Weighted so the robot mostly walks forward
-# ------------------------------------------------------------
+
 WANDER_ACTIONS   = ["forward", "forward", "forward", "left", "right"]
 WANDER_STEPS_MIN = 2
 WANDER_STEPS_MAX = 6
@@ -317,9 +291,6 @@ def random_wander():
     elif action == "right":
         Right(steps=steps)
 
-# ============================================================
-#  MAIN
-# ============================================================
 hexapod_start()
 timer(1.0)
 init_predator_values()
